@@ -35,17 +35,15 @@ class ApiAuthApplicationTests {
 	@BeforeEach
 	void setUp() {
 
-
-		// Crea un rol de prueba si no existe
 		Role role = new Role();
-		role.setId(3L); // Asegúrate de que este ID sea único
-		role.setName("Admin"); // Nombre del rol
+		role.setId(3L);
+		role.setName("Admin");
 		roleRepository.save(role);
 
 		Optional<Role> optionalRole = roleRepository.findById(3L);
 		if (optionalRole.isEmpty()) {
-			role.setId(3L); // Asegúrate de que este ID sea único
-			role.setName("Admin"); // Nombre del rol
+			role.setId(3L);
+			role.setName("Admin");
 			roleRepository.save(role);
 			System.out.println("Rol creado: " + role);
 		} else {
@@ -58,7 +56,7 @@ class ApiAuthApplicationTests {
 				1, // idType
 				1, // city
 				1, // gender
-				3, // role (usa el ID que acabas de crear)
+				3, // role
 				"123456789", // identificación
 				"Santiago", // nombre
 				"Correa", // apellido
@@ -72,6 +70,42 @@ class ApiAuthApplicationTests {
 
 		user = userResolver.signUp(userDto); // Asegúrate de que esto funcione correctamente
 	}
+
+	@Test
+	void createAdminUser() {
+		// Primero, crea un nuevo rol de administrador si no existe (asegúrate de que el ID corresponda al rol de admin)
+		Role adminRole = roleRepository.findById(3L).orElseThrow(() -> new RuntimeException("Admin role not found"));
+
+		// Luego, crea el DTO para el usuario
+		UserDto adminUserDto = new UserDto(
+                adminRole.getId(), // ID se generará automáticamente
+                null, // idType
+                1, // city
+                1, // gender
+                1, // Asigna el rol de admin
+                "123456789", // identificación
+                "Admin", // nombre
+                "User", // apellido
+                "2000-01-01", // fecha de nacimiento
+                "1234567890", // número de teléfono
+                "admin@example.com", // email
+                "password123", // contraseña
+                null, // avatarUrl
+                "Admin Address" // dirección
+                );
+
+		// Crea el usuario a través del resolver
+		User adminUser = userResolver.signUp(adminUserDto);
+
+		// Verifica que el usuario se creó correctamente
+		assertNotNull(adminUser);
+		assertEquals(adminUserDto.getEmail(), adminUser.getEmail());
+
+		// Limpieza
+		userRepository.delete(adminUser);
+	}
+
+
 	@AfterEach
 	void cleanUp(){
 		if (user != null) {
