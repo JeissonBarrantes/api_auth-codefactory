@@ -3,6 +3,7 @@ package com.authb.api_auth;
 import com.authb.api_auth.controller.UserResolver;
 import com.authb.api_auth.dto.AuthenticationRequest;
 import com.authb.api_auth.dto.UserDto;
+import com.authb.api_auth.entity.Role;
 import com.authb.api_auth.entity.User;
 import com.authb.api_auth.repository.RoleRepository;
 import com.authb.api_auth.repository.UserRepository;
@@ -30,24 +31,30 @@ class ApiAuthApplicationTests {
 
 	@BeforeEach
 	void setUp() {
+		// Crea un rol de prueba si no existe
+		Role role = new Role();
+		role.setId(3L); // Asegúrate de que este ID sea único
+		role.setName("Admin"); // Nombre del rol
+		roleRepository.save(role);
+
+		// Crea un usuario de prueba
 		UserDto userDto = new UserDto(
-				null, // id se generará automáticamente
-				33, // idType: proporciona un valor válido
-				33, // city: proporciona un valor válido
-				2, // gender: proporciona un valor válido
-				2, // role: asegúrate de que exista en la DB
-				"123456789", // identificationNumber: un valor de prueba
-				"Santiago", // firstName
-				"Correa", // lastName
-				"2000-05-07", // birthDate
-				"1234567890", // phoneNumber: un número de teléfono válido
-				"prueba1@udea.edu.co", // email: un email de prueba
-				"password123", // password: la contraseña que quieres usar
-				null, // avatarUrl
-				"Address 123" // address
+				null,
+				1, // idType
+				1, // city
+				1, // gender
+				3, // role (usa el ID que acabas de crear)
+				"123456789", // identificación
+				"Santiago", // nombre
+				"Correa", // apellido
+				"2000-05-07", // fecha de nacimiento
+				"1234567890", // teléfono
+				"prueba1@udea.edu.co", // email
+				"password123", // contraseña
+				null, // URL del avatar
+				"Dirección 123" // dirección
 		);
 
-		// Registra el usuario
 		user = userResolver.signUp(userDto); // Asegúrate de que esto funcione correctamente
 	}
 	@AfterEach
@@ -64,15 +71,22 @@ class ApiAuthApplicationTests {
 	}
 
 	@Test
-	void successfulSignIn(){
-		AuthenticationRequest authenticationRequest = new AuthenticationRequest("prueba1@udea.edu.co", "123");
+	void successfulSignIn() {
+		AuthenticationRequest authenticationRequest = new AuthenticationRequest("prueba1@udea.edu.co", "password123");
 		assertNotNull(userResolver.signIn(authenticationRequest));
 	}
 
 	@Test
+	void adminRol() {
+		assertNotNull(roleRepository.findById(3L).orElse(null)); // Verifica que el rol existe
+		assertEquals(roleRepository.findById(3L).get().getId(),
+				userResolver.modifyRole("prueba1@udea.edu.co", 3L).getRole().getId());
+	}
+
+	/*@Test
 	void adminRol(){
 		assertEquals(roleRepository.findById(Long.parseLong("3")).get().getId(),
 				userResolver.modifyRole("prueba1@udea.edu.co", Long.parseLong("3")).getRole().getId());
-	}
+	}*/
 
 }
