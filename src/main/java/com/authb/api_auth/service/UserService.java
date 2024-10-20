@@ -5,7 +5,6 @@ import com.authb.api_auth.entity.User;
 import com.authb.api_auth.interfaces.UserInterface;
 import com.authb.api_auth.repository.*;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
