@@ -34,11 +34,23 @@ class ApiAuthApplicationTests {
 
 	@BeforeEach
 	void setUp() {
+
+
 		// Crea un rol de prueba si no existe
 		Role role = new Role();
 		role.setId(3L); // Asegúrate de que este ID sea único
 		role.setName("Admin"); // Nombre del rol
 		roleRepository.save(role);
+
+		Optional<Role> optionalRole = roleRepository.findById(3L);
+		if (optionalRole.isEmpty()) {
+			role.setId(3L); // Asegúrate de que este ID sea único
+			role.setName("Admin"); // Nombre del rol
+			roleRepository.save(role);
+			System.out.println("Rol creado: " + role);
+		} else {
+			System.out.println("El rol ya existe: " + optionalRole.get());
+		}
 
 		// Crea un usuario de prueba
 		UserDto userDto = new UserDto(
@@ -65,6 +77,17 @@ class ApiAuthApplicationTests {
 		if (user != null) {
 			userRepository.delete(user);
 		}
+	}
+
+	@Test
+	void testRoleCreation() {
+		Role role = new Role();
+		role.setId(3L);
+		role.setName("Admin");
+		roleRepository.save(role);
+
+		Optional<Role> fetchedRole = roleRepository.findById(3L);
+		assertNotNull(fetchedRole.orElse(null), "El rol con ID 3 debería existir en la base de datos después de la creación.");
 	}
 
 
