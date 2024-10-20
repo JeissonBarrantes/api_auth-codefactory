@@ -73,31 +73,27 @@ class ApiAuthApplicationTests {
 
 	@Test
 	void createAdminUser() {
-		// Primero, crea un nuevo rol de administrador si no existe (asegúrate de que el ID corresponda al rol de admin)
-		Role adminRole = roleRepository.findById(3L).orElseThrow(() -> new RuntimeException("Admin role not found"));
+		Role adminRole = roleRepository.findById(3L)
+				.orElseThrow(() -> new RuntimeException("Admin role not found"));
 
-		// Luego, crea el DTO para el usuario
 		UserDto adminUserDto = new UserDto(
-                adminRole.getId(), // ID se generará automáticamente
-                null, // idType
-                1, // city
-                1, // gender
+                adminRole.getId(),
+                null,  // idType
+                null,     // city
+                1,     // gender
                 1, // Asigna el rol de admin
-                "123456789", // identificación
-                "Admin", // nombre
-                "User", // apellido
-                "2000-01-01", // fecha de nacimiento
-                "1234567890", // número de teléfono
-                "admin@example.com", // email
-                "password123", // contraseña
-                null, // avatarUrl
-                "Admin Address" // dirección
+                "123456789",
+                "Admin",
+                "User",
+                "2000-01-01",
+                "1234567890",
+                "admin@example.com",
+                "password123",
+                null,
+                "Admin Address"
                 );
 
-		// Crea el usuario a través del resolver
 		User adminUser = userResolver.signUp(adminUserDto);
-
-		// Verifica que el usuario se creó correctamente
 		assertNotNull(adminUser);
 		assertEquals(adminUserDto.getEmail(), adminUser.getEmail());
 
