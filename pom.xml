@@ -132,6 +132,7 @@
 					<schemaPaths>
 						<schemaPath>src/main/resources/graphql/schema.graphqls</schemaPath>
 					</schemaPaths>
+					<packageName>com.authb.api_auth.generated</packageName>
 					<outputDir>src/main/generated</outputDir>
 				</configuration>
 			</plugin>
