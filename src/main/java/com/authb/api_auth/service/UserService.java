@@ -37,7 +37,7 @@ public class UserService implements UserInterface, UserDetailsService {
     }
 
 
-    public UserDto toUserDto(User user) {
+    public static UserDto toUserDto(User user) {
         return new UserDto(
                 user.getId(),
                 Math.toIntExact(user.getIdType().getId()),
