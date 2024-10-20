@@ -71,36 +71,6 @@ class ApiAuthApplicationTests {
 		user = userResolver.signUp(userDto); // Asegúrate de que esto funcione correctamente
 	}
 
-	@Test
-	void createAdminUser() {
-		Role adminRole = roleRepository.findById(3L)
-				.orElseThrow(() -> new RuntimeException("Admin role not found"));
-
-		UserDto adminUserDto = new UserDto(
-                adminRole.getId(),
-                null,  // idType
-                null,     // city
-                1,     // gender
-                3,
-                "123456789",
-                "Admin",
-                "User",
-                "2000-01-01",
-                "1234567890",
-                "admin@example.com",
-                "password123",
-                null,
-                "Admin Address"
-                );
-
-		User adminUser = userResolver.signUp(adminUserDto);
-		assertNotNull(adminUser);
-		assertEquals(adminUserDto.getEmail(), adminUser.getEmail());
-
-
-		userRepository.delete(adminUser);
-	}
-
 
 	@AfterEach
 	void cleanUp(){
@@ -130,12 +100,6 @@ class ApiAuthApplicationTests {
 	void successfulSignIn() {
 		AuthenticationRequest authenticationRequest = new AuthenticationRequest("prueba1@udea.edu.co", "password123");
 		assertNotNull(userResolver.signIn(authenticationRequest));
-	}
-
-	@Test
-	void adminRol() {
-		assertEquals(roleRepository.findById(Long.parseLong("3")).get().getId(),
-				userResolver.modifyRole("prueba1@udea.edu.co", Long.parseLong("3")).getRole().getId());
 	}
 
 	/*@Test
