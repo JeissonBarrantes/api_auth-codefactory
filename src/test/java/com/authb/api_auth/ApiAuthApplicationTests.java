@@ -13,6 +13,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -43,7 +46,7 @@ class ApiAuthApplicationTests {
 				1, // idType
 				1, // city
 				1, // gender
-				3, // role (usa el ID que acabas de crear)
+				1, // role (usa el ID que acabas de crear)
 				"123456789", // identificación
 				"Santiago", // nombre
 				"Correa", // apellido
@@ -78,9 +81,14 @@ class ApiAuthApplicationTests {
 
 	@Test
 	void adminRol() {
-		assertNotNull(roleRepository.findById(3L).orElse(null)); // Verifica que el rol existe
-		assertEquals(roleRepository.findById(3L).get().getId(),
-				userResolver.modifyRole("prueba1@udea.edu.co", 3L).getRole().getId());
+		// Verifica que el rol existe antes de hacer la modificación
+		Optional<Role> optionalRole = roleRepository.findById(3L);
+		assertNotNull(optionalRole.orElse(null), "El rol con ID 3 debería existir en la base de datos.");
+
+		// Cambia el rol y verifica que se haya modificado correctamente
+		Role modifiedRole = userResolver.modifyRole("prueba1@udea.edu.co", 3L).getRole();
+		assertNotNull(modifiedRole, "El rol modificado no debería ser nulo.");
+		assertEquals(3L, modifiedRole.getId(), "El ID del rol modificado debería ser 3.");
 	}
 
 	/*@Test
