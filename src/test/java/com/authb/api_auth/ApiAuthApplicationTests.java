@@ -32,10 +32,10 @@ class ApiAuthApplicationTests {
 	void setUp() {
 		UserDto userDto = new UserDto(
 				null, // id se generará automáticamente
-				1, // idType: proporciona un valor válido
-				1, // city: proporciona un valor válido
-				1, // gender: proporciona un valor válido
-				1, // role: proporciona un valor válido (asegúrate de que exista en la DB)
+				33, // idType: proporciona un valor válido
+				33, // city: proporciona un valor válido
+				2, // gender: proporciona un valor válido
+				2, // role: asegúrate de que exista en la DB
 				"123456789", // identificationNumber: un valor de prueba
 				"Santiago", // firstName
 				"Correa", // lastName
@@ -47,7 +47,8 @@ class ApiAuthApplicationTests {
 				"Address 123" // address
 		);
 
-		user = userResolver.signUp(userDto);
+		// Registra el usuario
+		user = userResolver.signUp(userDto); // Asegúrate de que esto funcione correctamente
 	}
 	@AfterEach
 	void cleanUp(){
@@ -59,12 +60,7 @@ class ApiAuthApplicationTests {
 
 	@Test
 	void successfulSingUp(){
-		UserDto userDto = new UserDto( null,1,1,1,1,"1","santiago", "correa"
-				, "2000-05-07", "a", "a", "a", "a", "a");
-		user = userResolver.signUp(userDto);
-		assertEquals(userDto.getEmail(), user.getEmail());
-
-		userRepository.delete(user);
+		assertEquals("prueba1@udea.edu.co", user.getEmail());
 	}
 
 	@Test
