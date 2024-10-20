@@ -129,6 +129,7 @@
 					</execution>
 				</executions>
 				<configuration>
+					<!-- test -->
 					<schemaPaths>
 						<schemaPath>src/main/resources/graphql/schema.graphqls</schemaPath>
 					</schemaPaths>
