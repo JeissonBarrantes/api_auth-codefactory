@@ -81,7 +81,7 @@ class ApiAuthApplicationTests {
                 null,  // idType
                 null,     // city
                 1,     // gender
-                1, // Asigna el rol de admin
+                3,
                 "123456789",
                 "Admin",
                 "User",
@@ -97,7 +97,7 @@ class ApiAuthApplicationTests {
 		assertNotNull(adminUser);
 		assertEquals(adminUserDto.getEmail(), adminUser.getEmail());
 
-		// Limpieza
+
 		userRepository.delete(adminUser);
 	}
 
@@ -134,14 +134,8 @@ class ApiAuthApplicationTests {
 
 	@Test
 	void adminRol() {
-		// Verifica que el rol existe antes de hacer la modificación
-		Optional<Role> optionalRole = roleRepository.findById(3L);
-		assertNotNull(optionalRole.orElse(null), "El rol con ID 3 debería existir en la base de datos.");
-
-		// Cambia el rol y verifica que se haya modificado correctamente
-		Role modifiedRole = userResolver.modifyRole("prueba1@udea.edu.co", 3L).getRole();
-		assertNotNull(modifiedRole, "El rol modificado no debería ser nulo.");
-		assertEquals(3L, modifiedRole.getId(), "El ID del rol modificado debería ser 3.");
+		assertEquals(roleRepository.findById(Long.parseLong("3")).get().getId(),
+				userResolver.modifyRole("prueba1@udea.edu.co", Long.parseLong("3")).getRole().getId());
 	}
 
 	/*@Test
