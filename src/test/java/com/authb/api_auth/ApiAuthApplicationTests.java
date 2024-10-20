@@ -46,7 +46,7 @@ class ApiAuthApplicationTests {
 				1, // idType
 				1, // city
 				1, // gender
-				1, // role (usa el ID que acabas de crear)
+				3, // role (usa el ID que acabas de crear)
 				"123456789", // identificación
 				"Santiago", // nombre
 				"Correa", // apellido
