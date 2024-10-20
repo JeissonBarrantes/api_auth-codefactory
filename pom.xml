@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.authb</groupId>
-	<artifactId>api_auth</artifactId>
+	<artifactId>api_auth-codefactory</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>api_auth</name>
 	<description>Demo project for Spring Boot</description>
