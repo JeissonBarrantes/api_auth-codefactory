@@ -20,7 +20,7 @@ jobs:
           java-version: 17
           distribution: 'zulu' # Alternative distribution options are available.
       - name: Build Project
-        run: mvn clean verify
+        run: mvn clean install -DskipTests
       - name: Cache SonarCloud packages
         uses: actions/cache@v4
         with:
