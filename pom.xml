@@ -157,14 +157,19 @@
 				<executions>
 					<execution>
 						<goals>
-							<goal>prepare-agent</goal> <!-- Para que JaCoCo recopile datos de cobertura -->
+							<goal>prepare-agent</goal> <!-- Esto habilita la recolección de cobertura -->
 						</goals>
 					</execution>
 					<execution>
 						<id>report</id>
 						<goals>
-							<goal>report</goal> <!-- Para generar el reporte de cobertura -->
+							<goal>report</goal> <!-- Genera el reporte de cobertura -->
 						</goals>
+						<configuration>
+							<reports>
+								<xml>true</xml> <!-- Activa la generación del reporte en formato XML -->
+							</reports>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
