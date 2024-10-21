@@ -32,24 +32,24 @@ public class UserResolver implements GraphQLMutationResolver {
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
 
-<span class="nc" id="L35">    public UserResolver(UserService userService, AuthenticationManager authenticationManager, JwtUtil jwtUtil, UserRepository userRepository) {</span>
-<span class="nc" id="L36">        this.userService = userService;</span>
-<span class="nc" id="L37">        this.authenticationManager = authenticationManager;</span>
-<span class="nc" id="L38">        this.jwtUtil = jwtUtil;</span>
-<span class="nc" id="L39">        this.userRepository = userRepository;</span>
-<span class="nc" id="L40">    }</span>
+<span class="fc" id="L35">    public UserResolver(UserService userService, AuthenticationManager authenticationManager, JwtUtil jwtUtil, UserRepository userRepository) {</span>
+<span class="fc" id="L36">        this.userService = userService;</span>
+<span class="fc" id="L37">        this.authenticationManager = authenticationManager;</span>
+<span class="fc" id="L38">        this.jwtUtil = jwtUtil;</span>
+<span class="fc" id="L39">        this.userRepository = userRepository;</span>
+<span class="fc" id="L40">    }</span>
 
     @PreAuthorize(&quot;hasAuthority('ROL_ADMIN')&quot;)
     @QueryMapping
     public User userById(@Argument Long id) {
-<span class="nc" id="L45">        return userService.findById(id);</span>
+<span class="fc" id="L45">        return userService.findById(id);</span>
     }
 
     @PermitAll
     @MutationMapping
     public User signUp(@Argument(&quot;input&quot;) UserDto userDto) {
 
-<span class="nc" id="L52">        return userService.SignUp(userDto);</span>
+<span class="fc" id="L52">        return userService.SignUp(userDto);</span>
     }
 
     @PermitAll
@@ -58,30 +58,30 @@ public class UserResolver implements GraphQLMutationResolver {
             throws JSONException {
 
         try{
-<span class="nc" id="L61">            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(</span>
-<span class="nc" id="L62">                    authenticationRequest.getEmail(), authenticationRequest.getPassword()));</span>
-<span class="nc" id="L63">            System.out.println(&quot;Autenticación exitosa.&quot;);</span>
-<span class="nc" id="L64">        } catch (BadCredentialsException e) {</span>
+<span class="fc" id="L61">            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(</span>
+<span class="fc" id="L62">                    authenticationRequest.getEmail(), authenticationRequest.getPassword()));</span>
+<span class="fc" id="L63">            System.out.println(&quot;Autenticación exitosa.&quot;);</span>
+<span class="fc" id="L64">        } catch (BadCredentialsException e) {</span>
             // Capturar excepciones de credenciales incorrectas
-<span class="nc" id="L66">            throw new GraphQLException(&quot;Invalid username or password&quot;);</span>
+<span class="fc" id="L66">            throw new GraphQLException(&quot;Invalid username or password&quot;);</span>
 
 <span class="nc" id="L68">        } catch (AuthenticationException e) {</span>
             // Capturar otras excepciones de autenticación
 <span class="nc" id="L70">            throw new GraphQLException(&quot;Unauthorized&quot;);</span>
-<span class="nc" id="L71">        }</span>
+<span class="fc" id="L71">        }</span>
 
-<span class="nc" id="L73">        final UserDetails userDetails = userService.loadUserByUsername(authenticationRequest.getEmail());</span>
-<span class="nc" id="L74">        User user = userRepository.findFirstByEmail(userDetails.getUsername()).orElse(null);</span>
+<span class="fc" id="L73">        final UserDetails userDetails = userService.loadUserByUsername(authenticationRequest.getEmail());</span>
+<span class="fc" id="L74">        User user = userRepository.findFirstByEmail(userDetails.getUsername()).orElse(null);</span>
 
-<span class="nc" id="L76">        final String jwt = jwtUtil.generateToken(userDetails.getUsername(), user.getId());</span>
+<span class="fc" id="L76">        final String jwt = jwtUtil.generateToken(userDetails.getUsername(), user.getId());</span>
 
-<span class="nc" id="L78">        return jwt;</span>
+<span class="fc" id="L78">        return jwt;</span>
     }
 
     @PermitAll
     @QueryMapping
     public User userByEmail(@Argument String email) {
-<span class="nc" id="L84">        return userService.findByEmail(email);</span>
+<span class="fc" id="L84">        return userService.findByEmail(email);</span>
     }
 
     @PermitAll

@@ -1,3 +1,4 @@
 com\authb\api_auth\TestRunner.class
+com\authb\api_auth\controller\UserResolverTest.class
 com\authb\api_auth\stepdefinitions\RegisterStepDefinitions.class
-com\authb\api_auth\ApiAuthApplicationTests.class
+com\authb\api_auth\service\UserServiceTest.class
