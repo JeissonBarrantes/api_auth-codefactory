@@ -105,4 +105,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # Add SONAR_TOKEN to your GitHub secrets
-        run: mvn -B -X org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=JeissonBarrantes_api_auth-codefactory
+        run: mvn -B -X org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=JeissonBarrantes_api_auth-codefactory -Dsonar.junit.reportPaths=target/surefire-reports
+          -Dsonar.jacoco.reportPaths=target/site/jacoco/jacoco.xml
