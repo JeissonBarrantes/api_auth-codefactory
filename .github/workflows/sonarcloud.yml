@@ -12,7 +12,7 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    needs: sonarcloud  # Este trabajo depende de que el trabajo de build se complete con éxito
+    needs: sonarcloud
     services:
       postgres:
         image: postgres:latest
@@ -44,12 +44,11 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
       - name: Build
-        run: mvn -B verify
+        run: mvn -B -X verify
 
   tests:
     name: Unit tests
     runs-on: ubuntu-latest
-
     services:
       postgres:
         image: postgres:latest
@@ -71,14 +70,12 @@ jobs:
         with:
           java-version: 17
           distribution: 'zulu'
-
       - name: Cache Maven packages
         uses: actions/cache@v4
         with:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
-
       - name: Run Tests
         run: mvn -B -X test
 
@@ -103,8 +100,6 @@ jobs:
           restore-keys: ${{ runner.os }}-sonar
       - name: SonarCloud Analyze
         env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # Add SONAR_TOKEN to your GitHub secrets
-        run: mvn -B -X org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=JeissonBarrantes_api_auth-codefactory -Dsonar.coverage.jacoco.xmlReportPaths=/target/site/jacoco-aggregate/jacoco.xml sonar:sonar -Pcoverage
-
-
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # GitHub token for PR analysis
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}    # SonarCloud token for project analysis
+        run: mvn clean verify sonar:sonar -B -X org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=JeissonBarrantes_api_auth-codefactory -Dsonar.login=${{ secrets.SONAR_TOKEN }}

@@ -1,4 +1,4 @@
-package com.authb.api_auth;
+package com.authb.api_auth.service;
 import com.authb.api_auth.dto.UserDto;
 import com.authb.api_auth.entity.City;
 import com.authb.api_auth.entity.Country;
@@ -8,7 +8,6 @@ import com.authb.api_auth.entity.Province;
 import com.authb.api_auth.entity.User;
 import com.authb.api_auth.entity.Role;
 import com.authb.api_auth.repository.*;
-import com.authb.api_auth.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,16 +19,16 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.HashSet;
 import java.util.Optional;
+import com.authb.api_auth.service.UserService;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-public class ApiAuthApplicationTests {
+public class UserServiceTest {
 
 	@Mock
 	private GenderRepository genderRepository;
@@ -46,12 +45,6 @@ public class ApiAuthApplicationTests {
 
 	@InjectMocks
 	private UserService userService;
-
-	@BeforeEach
-	void setUp() {
-		userService = new UserService(genderRepository, idTypeRepository, cityRepository, roleRepository, userRepository, passwordEncoder);
-	}
-
 
 	@Test
 	void testToUserDto() {
@@ -175,6 +168,7 @@ public class ApiAuthApplicationTests {
 		userDto.setGender(1); // ID en lugar de instancia de Gender
 		userDto.setRole(1); // ID en lugar de instancia de Role
 
+
 		// Simulación de la acción del repositorio que guarda el usuario
 		when(userRepository.save(any(User.class))).thenAnswer(invocation -> {
 			User user = invocation.getArgument(0);
@@ -191,9 +185,27 @@ public class ApiAuthApplicationTests {
 		assertEquals("juan.perez@example.com", result.getEmail());
 		assertEquals(1L, result.getId()); // Verifica que el ID se haya asignado correctamente
 
+		verify(idTypeRepository, times(1)).findById(1L);
+		verify(cityRepository, times(1)).findById(1L);
+		verify(genderRepository, times(1)).findById(1L);
+		verify(roleRepository, times(1)).findById(1L);
+
+
 		// Verificación de que se haya guardado correctamente
 		verify(userRepository, times(1)).save(any(User.class));
 	}
+
+	/*@Test
+	void testToUser_NullFields() {
+		UserDto userDto = new UserDto();
+		// No se establece ningún valor en userDto (campos nulos)
+		User user = userService.toUser(userDto);
+
+		assertNull(user.getFirstName());
+		assertNull(user.getLastName());
+		assertNull(user.getEmail());
+		// Verificar que el objeto usuario se maneja correctamente a pesar de los valores nulos
+	}*/
 
 
 	@Test
