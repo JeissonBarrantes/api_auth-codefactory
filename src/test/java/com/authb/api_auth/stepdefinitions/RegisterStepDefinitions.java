@@ -2,20 +2,32 @@ package com.authb.api_auth.stepdefinitions;
 
 import com.authb.api_auth.dto.UserDto;
 import com.authb.api_auth.entity.User;
+import com.authb.api_auth.repository.UserRepository;
 import com.authb.api_auth.service.UserService;
 import io.cucumber.java.en.*;
+import io.cucumber.java.After;
 import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootTest
+@Transactional
 public class RegisterStepDefinitions {
 
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     private UserDto userDto;
     private User registeredUser;
+    private Exception registrationException;
 
     @Given("el servicio de registro está disponible")
     public void elServicioDeRegistroEstaDisponible() {
@@ -53,10 +65,39 @@ public class RegisterStepDefinitions {
         registeredUser = userService.SignUp(userDto);
     }
 
-    @Then("el sistema confirma el registro mostrando un mensaje de éxito")
-    public void elSistemaConfirmaElRegistroMostrandoUnMensajeDeExito() {
+    @Then("el usuario debería estar presente en la base de datos")
+    public void elUsuarioDeberiaEstarPresenteEnLaBaseDeDatos() {
         Assert.assertNotNull(registeredUser);
         Assert.assertEquals(userDto.getEmail(), registeredUser.getEmail());
+
+        Assert.assertTrue(passwordEncoder.matches(userDto.getPassword(), registeredUser.getPassword()));
         System.out.println("Registro exitoso: " + registeredUser.getEmail());
+
+    }
+
+    @When("intento registrarme")
+    public void intentoRegistrarme() {
+        try {
+            registeredUser = userService.SignUp(userDto);
+        } catch (Exception e) {
+            registrationException  = e;
+        }
+    }
+
+    @Then("el sistema muestra un mensaje de error")
+    public void elSistemaMuestraUnMensajeDeError() {
+        Assert.assertNotNull(registrationException);
+        System.out.println("Se lanzó una excepción: " + registrationException.getMessage());
+    }
+
+    @And("el usuario no debería estar presente en la base de datos")
+    public void elUsuarioNoDeberiaEstarPresenteEnLaBaseDeDatos() {
+        User existingUser = userRepository.findFirstByEmail(userDto.getEmail()).orElse(null);
+        Assert.assertNull(existingUser);
+    }
+
+    @After
+    public void tearDown() {
+        userRepository.deleteAll();
     }
 }

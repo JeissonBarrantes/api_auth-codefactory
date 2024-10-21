@@ -7,7 +7,7 @@ api_auth,com.authb.api_auth.apiConfig,DateScalar.new Coercing() {...},16,0,0,0,4
 api_auth,com.authb.api_auth.apiConfig,GraphQLConfig,5,0,0,0,2,0,2,0,2,0
 api_auth,com.authb.api_auth.apiConfig,DateScalar,15,0,0,0,6,0,2,0,2,0
 api_auth,com.authb.api_auth.apiConfig,SecurityConfig,52,0,0,0,10,0,7,0,7,0
-api_auth,com.authb.api_auth.controller,UserResolver,99,0,0,0,25,0,6,0,6,0
+api_auth,com.authb.api_auth.controller,UserResolver,22,77,0,0,6,19,1,5,1,5
 api_auth,com.authb.api_auth,ApiAuthApplication,8,0,0,0,3,0,2,0,2,0
 api_auth,com.authb.api_auth.util,JwtRequestFilter,80,0,14,0,19,0,9,0,2,0
 api_auth,com.authb.api_auth.util,JwtUtil,100,0,4,0,24,0,12,0,10,0
