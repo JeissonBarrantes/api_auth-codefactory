@@ -127,6 +127,11 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
 			<version>RELEASE</version>
@@ -168,6 +173,13 @@
 						</goals>
 					</execution>
 					<execution>
+						<id>package</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+					<execution>
 						<id>report</id>
 						<phase>test</phase>
 						<goals>
@@ -188,7 +200,7 @@
 										<limit>
 											<counter>LINE</counter>
 											<value>COVEREDRATIO</value>
-											<minimum>0.3</minimum>
+											<minimum>0.6</minimum>
 										</limit>
 									</limits>
 								</rule>
