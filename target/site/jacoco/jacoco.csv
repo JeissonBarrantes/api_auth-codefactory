@@ -1,0 +1,21 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+api_auth,com.authb.api_auth.entity,Role,0,15,0,0,0,6,0,1,0,1
+api_auth,com.authb.api_auth.entity,Gender,0,9,0,0,0,4,0,1,0,1
+api_auth,com.authb.api_auth.entity,IdType,0,9,0,0,0,4,0,1,0,1
+api_auth,com.authb.api_auth.entity,City,0,12,0,0,0,5,0,1,0,1
+api_auth,com.authb.api_auth.apiConfig,DateScalar.new Coercing() {...},16,0,0,0,4,0,4,0,4,0
+api_auth,com.authb.api_auth.apiConfig,GraphQLConfig,5,0,0,0,2,0,2,0,2,0
+api_auth,com.authb.api_auth.apiConfig,DateScalar,15,0,0,0,6,0,2,0,2,0
+api_auth,com.authb.api_auth.apiConfig,SecurityConfig,52,0,0,0,10,0,7,0,7,0
+api_auth,com.authb.api_auth.controller,UserResolver,99,0,0,0,25,0,6,0,6,0
+api_auth,com.authb.api_auth,ApiAuthApplication,8,0,0,0,3,0,2,0,2,0
+api_auth,com.authb.api_auth.util,JwtRequestFilter,80,0,14,0,19,0,9,0,2,0
+api_auth,com.authb.api_auth.util,JwtUtil,100,0,4,0,24,0,12,0,10,0
+api_auth,com.authb.api_auth.service,CountryService,69,0,4,0,17,0,5,0,3,0
+api_auth,com.authb.api_auth.service,CityService,31,0,0,0,11,0,3,0,3,0
+api_auth,com.authb.api_auth.service,RolService,82,0,4,0,21,0,6,0,4,0
+api_auth,com.authb.api_auth.service,GenderService,19,0,0,0,7,0,3,0,3,0
+api_auth,com.authb.api_auth.service,IdTypeService,19,0,0,0,5,0,3,0,3,0
+api_auth,com.authb.api_auth.service,ProvinceService,81,0,4,0,20,0,5,0,3,0
+api_auth,com.authb.api_auth.service,PermissionService,73,0,4,0,19,0,5,0,3,0
+api_auth,com.authb.api_auth.service,UserService,0,185,0,2,0,46,0,9,0,8

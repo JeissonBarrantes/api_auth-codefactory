@@ -1,5 +1,4 @@
-package com.authb.api_auth.runner;
-
+package com.authb.api_auth;
 import io.cucumber.junit.Cucumber;
 import io.cucumber.junit.CucumberOptions;
 import org.junit.runner.RunWith;
@@ -10,12 +9,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 @RunWith(Cucumber.class)
 @CucumberOptions(
         features = "src/test/resources/features",
-        glue = {"com.authb.api_auth.stepdefinitions"},
-        plugin = {"pretty", "html:target/cucumber-reports", "json:target/cucumber.json"},  // Reportes generados
-        monochrome = true  // Salida más legible en la consola
+        glue = {"com.authb.api_auth.stepdefinitions", "com.authb.api_auth.config"},
+        plugin = {"pretty", "html:target/cucumber-reports", "json:target/cucumber.json"},
+        monochrome = true
 )
-@SpringBootTest
-@WebAppConfiguration
-@ContextConfiguration
-public class CucumberTestRunner {
+public class TestRunner {
 }

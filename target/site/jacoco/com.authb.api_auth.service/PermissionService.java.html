@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PermissionService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">api_auth</a> &gt; <a href="index.source.html" class="el_package">com.authb.api_auth.service</a> &gt; <span class="el_source">PermissionService.java</span></div><h1>PermissionService.java</h1><pre class="source lang-java linenums">package com.authb.api_auth.service;
+
+import com.authb.api_auth.dto.PermissionDto;
+import com.authb.api_auth.entity.Permission;
+import com.authb.api_auth.entity.Role;
+import com.authb.api_auth.repository.RoleRepository;
+import org.springframework.stereotype.Service;
+
+import java.util.HashSet;
+import java.util.Set;
+
+@Service
+public class PermissionService {
+
+    private static RoleRepository roleRepository;
+<span class="nc" id="L16">    public PermissionService(RoleRepository roleRepository){</span>
+<span class="nc" id="L17">        PermissionService.roleRepository = roleRepository;</span>
+<span class="nc" id="L18">    }</span>
+
+    public static PermissionDto toPermissionDto(Permission permission){
+<span class="nc" id="L21">        Set&lt;String&gt; roleNames = new HashSet&lt;&gt;();</span>
+<span class="nc bnc" id="L22" title="All 2 branches missed.">        for (Role role: permission.getRoles()) {</span>
+<span class="nc" id="L23">            roleNames.add(role.getName());</span>
+<span class="nc" id="L24">        }</span>
+<span class="nc" id="L25">        return new PermissionDto(</span>
+<span class="nc" id="L26">                permission.getId(),</span>
+<span class="nc" id="L27">                permission.getName(),</span>
+<span class="nc" id="L28">                permission.getDescription(),</span>
+                roleNames
+        );
+    }
+
+    public static Permission toPermission(PermissionDto permissionDto){
+<span class="nc" id="L34">        Set&lt;Role&gt;roles = new HashSet&lt;&gt;();</span>
+<span class="nc bnc" id="L35" title="All 2 branches missed.">        for (String roleName: permissionDto.getRoleName()) {</span>
+<span class="nc" id="L36">            roles.add(roleRepository.findByName(roleName).orElse(null));</span>
+<span class="nc" id="L37">        }</span>
+<span class="nc" id="L38">        return new Permission(</span>
+<span class="nc" id="L39">                permissionDto.getId(),</span>
+<span class="nc" id="L40">                permissionDto.getName(),</span>
+<span class="nc" id="L41">                permissionDto.getDescription(),</span>
+                roles
+        );
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

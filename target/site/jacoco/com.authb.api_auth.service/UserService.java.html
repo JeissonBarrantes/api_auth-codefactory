@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">api_auth</a> &gt; <a href="index.source.html" class="el_package">com.authb.api_auth.service</a> &gt; <span class="el_source">UserService.java</span></div><h1>UserService.java</h1><pre class="source lang-java linenums">package com.authb.api_auth.service;
+
+import com.authb.api_auth.dto.UserDto;
+import com.authb.api_auth.entity.User;
+import com.authb.api_auth.interfaces.UserInterface;
+import com.authb.api_auth.repository.*;
+
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+
+@Service
+public class UserService implements UserInterface, UserDetailsService {
+
+    private static GenderRepository genderRepository;
+    private static IdTypeRepository idTypeRepository;
+    private static CityRepository cityRepository;
+    private static RoleRepository roleRepository;
+    private static UserRepository userRepository;
+
+    private static PasswordEncoder passwordEncoder;
+
+
+    public UserService(GenderRepository genderRepository, IdTypeRepository idTypeRepository, CityRepository cityRepository
+<span class="fc" id="L29">            , RoleRepository roleRepository, UserRepository userRepository, PasswordEncoder passwordEncoder) {</span>
+<span class="fc" id="L30">        UserService.genderRepository = genderRepository;</span>
+<span class="fc" id="L31">        UserService.idTypeRepository = idTypeRepository;</span>
+<span class="fc" id="L32">        UserService.cityRepository = cityRepository;</span>
+<span class="fc" id="L33">        UserService.roleRepository = roleRepository;</span>
+<span class="fc" id="L34">        UserService.userRepository = userRepository;</span>
+<span class="fc" id="L35">        UserService.passwordEncoder = passwordEncoder;</span>
+<span class="fc" id="L36">    }</span>
+
+
+    public static UserDto toUserDto(User user) {
+<span class="fc" id="L40">        return new UserDto(</span>
+<span class="fc" id="L41">                user.getId(),</span>
+<span class="fc" id="L42">                Math.toIntExact(user.getIdType().getId()),</span>
+<span class="fc" id="L43">                Math.toIntExact(user.getCity().getId()),</span>
+<span class="fc" id="L44">                Math.toIntExact(user.getGender().getId()),</span>
+<span class="fc" id="L45">                Math.toIntExact(user.getRole().getId()),</span>
+<span class="fc" id="L46">                user.getIdentificationNumber(),</span>
+<span class="fc" id="L47">                user.getFirstName(),</span>
+<span class="fc" id="L48">                user.getLastName(),</span>
+<span class="fc" id="L49">                user.getBirthDate(),</span>
+<span class="fc" id="L50">                user.getPhoneNumber(),</span>
+<span class="fc" id="L51">                user.getEmail(),</span>
+<span class="fc" id="L52">                user.getPassword(),</span>
+<span class="fc" id="L53">                user.getAvatarUrl(),</span>
+<span class="fc" id="L54">                user.getAddress()</span>
+        );
+    }
+    public User toUser(UserDto userDto) {
+<span class="fc" id="L58">        System.out.println(userDto.toString());</span>
+<span class="fc" id="L59">        return new User(</span>
+<span class="fc" id="L60">                userDto.getId(),</span>
+<span class="fc" id="L61">                idTypeRepository.findById(Long.valueOf(userDto.getIdType())).orElse(null) ,</span>
+<span class="fc" id="L62">                cityRepository.findById(Long.valueOf(userDto.getCity())).orElse(null) ,</span>
+<span class="fc" id="L63">                genderRepository.findById(Long.valueOf(userDto.getGender())).orElse(null),</span>
+<span class="fc" id="L64">                roleRepository.findById(Long.valueOf(userDto.getRole())).orElse(null),</span>
+<span class="fc" id="L65">                userDto.getIdentificationNumber(),</span>
+<span class="fc" id="L66">                userDto.getFirstName(),</span>
+<span class="fc" id="L67">                userDto.getLastName(),</span>
+<span class="fc" id="L68">                userDto.getBirthDate(),</span>
+<span class="fc" id="L69">                userDto.getPhoneNumber(),</span>
+<span class="fc" id="L70">                userDto.getEmail(),</span>
+<span class="fc" id="L71">                passwordEncoder.encode(userDto.getPassword()),</span>
+<span class="fc" id="L72">                userDto.getAvatarUrl(),</span>
+<span class="fc" id="L73">                userDto.getAddress()</span>
+        );
+    }
+    @Override
+    public User SignUp(UserDto userDto) {
+<span class="fc" id="L78">        return userRepository.save(toUser(userDto));</span>
+    }
+
+    public User findById(Long id){
+<span class="fc" id="L82">        return (userRepository.findById(id).orElse(null));</span>
+    }
+
+    public User findByEmail(String email) {
+<span class="fc" id="L86">        return userRepository.findFirstByEmail(email).orElse(null);</span>
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+<span class="fc" id="L91">        User user = userRepository.findFirstByEmail(email).orElse(null);</span>
+<span class="fc bfc" id="L92" title="All 2 branches covered.">        if (user == null) throw new UsernameNotFoundException(&quot;email not found&quot;, null);</span>
+<span class="fc" id="L93">        return  new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), new ArrayList&lt;&gt;());</span>
+    }
+    public User updateUser(User user) {
+<span class="fc" id="L96">        return userRepository.save(user);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>
