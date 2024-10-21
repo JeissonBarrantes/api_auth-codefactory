@@ -1,0 +1,3 @@
+com\authb\api_auth\TestRunner.class
+com\authb\api_auth\stepdefinitions\RegisterStepDefinitions.class
+com\authb\api_auth\ApiAuthApplicationTests.class
