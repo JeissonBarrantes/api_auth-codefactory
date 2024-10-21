@@ -80,7 +80,7 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
 
       - name: Run Tests
-        run: mvn -B test
+        run: mvn -B -X test
 
   sonarcloud:
     name: SonarCloud Analysis
