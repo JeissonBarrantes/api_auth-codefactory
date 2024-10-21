@@ -102,4 +102,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # GitHub token for PR analysis
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}    # SonarCloud token for project analysis
-        run: mvn -B -X org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=JeissonBarrantes_api_auth-codefactory -Dsonar.coverage.jacoco.xmlReportPaths=/target/site/jacoco/jacoco.xml -Pcoverage
+        run: mvn -B -X org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=JeissonBarrantes_api_auth-codefactory -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml -Pcoverage
