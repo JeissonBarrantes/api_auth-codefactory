@@ -43,17 +43,17 @@ class UserResolverTest {
         MockitoAnnotations.openMocks(this);
     }
 
-
-
     @Test
     void testSignUp() {
+        // Arrange
         UserDto userDto = new UserDto();
         User expectedUser = new User();
-
         when(userService.SignUp(any(UserDto.class))).thenReturn(expectedUser);
 
+        // Act
         User result = userResolver.signUp(userDto);
 
+        // Assert
         assertNotNull(result);
         assertEquals(expectedUser, result);
         verify(userService, times(1)).SignUp(any(UserDto.class));
@@ -61,8 +61,8 @@ class UserResolverTest {
 
     @Test
     void testSignIn_Success() throws Exception {
+        // Arrange
         AuthenticationRequest authenticationRequest = new AuthenticationRequest("test@example.com", "password");
-
         authenticationRequest.setEmail("test@example.com");
         authenticationRequest.setPassword("password");
 
@@ -77,14 +77,17 @@ class UserResolverTest {
         when(userRepository.findFirstByEmail(authenticationRequest.getEmail())).thenReturn(java.util.Optional.of(user));
         when(jwtUtil.generateToken(userDetails.getUsername(), user.getId())).thenReturn("jwtToken");
 
+        // Act
         String token = userResolver.signIn(authenticationRequest);
 
+        // Assert
         assertNotNull(token);
         assertEquals("jwtToken", token);
     }
 
     @Test
     void testSignIn_InvalidCredentials() {
+        // Arrange
         AuthenticationRequest authenticationRequest = new AuthenticationRequest("test@example.com", "password");
         authenticationRequest.setEmail("test@example.com");
         authenticationRequest.setPassword("wrongPassword");
@@ -92,37 +95,45 @@ class UserResolverTest {
         when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
                 .thenThrow(new BadCredentialsException("Invalid credentials"));
 
+        // Act & Assert (combined as the action throws an exception)
         assertThrows(GraphQLException.class, () -> userResolver.signIn(authenticationRequest));
     }
 
     @Test
     void testUserById() {
+        // Arrange
         User expectedUser = new User();
         expectedUser.setId(1L);
 
         when(userService.findById(1L)).thenReturn(expectedUser);
 
+        // Act
         User result = userResolver.userById(1L);
 
+        // Assert
         assertNotNull(result);
         assertEquals(expectedUser, result);
     }
 
     @Test
     void testUserByEmail() {
+        // Arrange
         User expectedUser = new User();
         expectedUser.setEmail("test@example.com");
 
         when(userService.findByEmail("test@example.com")).thenReturn(expectedUser);
 
+        // Act
         User result = userResolver.userByEmail("test@example.com");
 
+        // Assert
         assertNotNull(result);
         assertEquals(expectedUser, result);
     }
 
     /*@Test
     void testModifyRole() {
+        // Arrange
         User user = new User();
         user.setEmail("test@example.com");
 
@@ -132,8 +143,10 @@ class UserResolverTest {
         when(userService.findByEmail("test@example.com")).thenReturn(user);
         when(com.authb.api_auth.service.RolService.findById(1L)).thenReturn(role);
 
+        // Act
         User result = userResolver.modifyRole("test@example.com", 1L);
 
+        // Assert
         assertNotNull(result);
         assertEquals(role, result.getRole());
     }*/
