@@ -4,6 +4,7 @@ import com.authb.api_auth.dto.UserDto;
 import com.authb.api_auth.entity.User;
 import com.authb.api_auth.repository.UserRepository;
 import com.authb.api_auth.service.UserService;
+import io.cucumber.java.AfterAll;
 import io.cucumber.java.en.*;
 import io.cucumber.java.After;
 import org.junit.Assert;
@@ -13,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootTest
-@Transactional
 public class RegisterStepDefinitions {
 
     @Autowired
@@ -34,7 +34,7 @@ public class RegisterStepDefinitions {
         Assert.assertNotNull(userService);
     }
 
-    @When("ingreso los siguientes datos")
+    @Given("ingresa los siguientes datos")
     public void ingresoLosSiguientesDatos(io.cucumber.datatable.DataTable dataTable) {
         var userData = dataTable.asMaps().get(0); // Obtener el primer set de datos
 
@@ -55,6 +55,11 @@ public class RegisterStepDefinitions {
         userDto.setAddress(userData.get("address"));
     }
 
+    @When("intenta registrarse con datos correctos")
+    public void intentaRegistrarseConDatosCorrectos() {
+        registeredUser = userService.SignUp(userDto);
+    }
+/*
     @And("autorizo al sistema a acceder a mi información")
     public void autorizoAlSistemaAAccederAMiInformacion() {
         System.out.println("Usuario autoriza al sistema a acceder a su información.");
@@ -62,9 +67,9 @@ public class RegisterStepDefinitions {
 
     @And("hago clic en {string}")
     public void hagoClicEn(String button) {
-        registeredUser = userService.SignUp(userDto);
-    }
 
+    }
+*/
     @Then("el usuario debería estar presente en la base de datos")
     public void elUsuarioDeberiaEstarPresenteEnLaBaseDeDatos() {
         Assert.assertNotNull(registeredUser);
@@ -75,8 +80,8 @@ public class RegisterStepDefinitions {
 
     }
 
-    @When("intento registrarme")
-    public void intentoRegistrarme() {
+    @When("intenta registrarse con un correo en uso")
+    public void intentoRegistrarmeConunCorreoEnUso() {
         try {
             registeredUser = userService.SignUp(userDto);
         } catch (Exception e) {
@@ -96,8 +101,19 @@ public class RegisterStepDefinitions {
         Assert.assertNull(existingUser);
     }
 
+    @When("intenta registrarse sin completar todos los campos obligatorios")
+    public void intentoRegistrarmeSinCompletarCamposObligatorios() {
+        userDto = new UserDto();
+        try {
+            registeredUser = userService.SignUp(userDto);
+        } catch (Exception e) {
+            registrationException = e;
+        }
+    }
+
     @After
-    public void tearDown() {
+    public void cleanUpDatabase() {
         userRepository.deleteAll();
     }
+
 }
